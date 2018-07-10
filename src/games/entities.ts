@@ -1,0 +1,83 @@
+import { BaseEntity, PrimaryGeneratedColumn, Column, Entity, Index, OneToMany, ManyToOne } from 'typeorm'
+import User from '../users/entity'
+
+export type Symbol = 'x' | 'o' | 'b' | null
+export type Row = [ Symbol | null, Symbol | null, Symbol | null, Symbol | null, Symbol | null ] 
+export type Board = [ Row, Row, Row, Row, Row ]
+
+type Status = 'pending' | 'started' | 'finished'
+
+const emptyRow: Row = [null, null, null, null, null]
+
+const randomRow: Row[] = [ ['b', null, null, null, null],
+                    [null , 'b', null, null, null],
+                    [null, null, 'b', null, null],
+                    [null, null, null, 'b', null], 
+                    [null, null, null, null, 'b'] ]
+
+const startingBoatRow: Row = randomRow[Math.floor(Math.random() * randomRow.length)]
+
+const randomBoatLocation: Board[] = [[ startingBoatRow, emptyRow, emptyRow, emptyRow, emptyRow ],
+                                  [ emptyRow, startingBoatRow, emptyRow, emptyRow, emptyRow ],
+                                  [ emptyRow, emptyRow, startingBoatRow, emptyRow, emptyRow ],
+                                  [ emptyRow, emptyRow, emptyRow, startingBoatRow, emptyRow ],
+                                  [ emptyRow, emptyRow, emptyRow, emptyRow, startingBoatRow ]]
+
+let defaultBoatLocation: Board = randomBoatLocation[Math.floor(Math.random() * randomBoatLocation.length)]
+
+
+
+
+const emptyBoard: Board = [ emptyRow, emptyRow, emptyRow, emptyRow, emptyRow ]
+
+@Entity()
+export class Game extends BaseEntity {
+
+  @PrimaryGeneratedColumn()
+  id?: number
+
+  @Column('json', {default: emptyBoard})
+  board: Board
+
+  // @Column('json', {default: emptyBoard})
+  // board2: Board
+
+  @Column('char', {length:1, default: 'x'})
+  turn: Symbol
+
+  @Column('char', {length:1, nullable: true})
+  winner: Symbol
+
+  @Column('text', {default: 'pending'})
+  status: Status
+
+  // this is a relation, read more about them here:
+  // http://typeorm.io/#/many-to-one-one-to-many-relations
+  @OneToMany(_ => Player, player => player.game, {eager:true})
+  players: Player[]
+}
+
+@Entity()
+@Index(['game', 'user', 'symbol'], {unique:true})
+export class Player extends BaseEntity {
+
+  @PrimaryGeneratedColumn()
+  id?: number
+
+  @ManyToOne(_ => User, user => user.players)
+  user: User
+
+  // @Column()
+  // userId: number
+
+  @ManyToOne(_ => Game, game => game.players)
+  game: Game
+
+  @Column('char', {length: 1})
+  symbol: Symbol
+
+  // @Column('json', {default: defaultBoatLocation})
+  @Column('json')
+  boatLocation: Board
+
+}
