@@ -105,6 +105,9 @@ export default class GameController {
     @Param('id') gameId: number,
     @Body() update: GameUpdate
   ) {
+
+    console.log("This is the beginning of the patch")
+
     const game = await Game.findOneById(gameId)
     if (!game) throw new NotFoundError(`Game does not exist`)
 
@@ -113,33 +116,47 @@ export default class GameController {
     if (!player) throw new ForbiddenError(`You are not part of this game`)
     if (game.status !== 'started') throw new BadRequestError(`The game is not started yet`)
     if (player.symbol !== game.turn) throw new BadRequestError(`It's not your turn`)
-    if (!isValidTransition(player.symbol, game.board, update.board)) {
-      throw new BadRequestError(`Invalid move`)
-    }    
+    // if (!isValidTransition(player.symbol, game.board, update.board)) {
+    //   throw new BadRequestError(`Invalid move`)
+    // }    
 
-    const winner = calculateWinner(update.board)
+    // const winner = calculateWinner(update.board)
+    // const hitBoat = calculateHit(update.board, player.boatLocation)
 
-    const hitBoat = calculateHit(update.board, player.boatLocation)
+    // if (winner && hitBoat) {
+    //   game.winner = winner
+    //   game.status = 'finished'
+    // }
+    // else if (finished(update.board)) {
+    //   game.status = 'finished'
+    // }
+    // else {
+    //   game.turn = player.symbol === 'x' ? 'o' : 'x'
+    // }
 
-    if (winner || hitBoat) {
-      game.winner = winner
-      game.status = 'finished'
-    }
-    else if (finished(update.board)) {
-      game.status = 'finished'
-    }
-    else {
-      game.turn = player.symbol === 'x' ? 'o' : 'x'
-    }
-    game.board = update.board
+    game.turn = player.symbol === 'x' ? 'o' : 'x'
+
     await game.save()
+
+    // game.board = update.board
+    // game.players.filter(x => {return x.currentUser === userId})[0].myBoard = update.board
+
+    player.myBoard = update.board
+
+    await player.save()
+
+    console.log('THIS PLAYER',player)
+    console.log('UPDATE',update)
+
     
+
     io.emit('action', {
       type: 'UPDATE_GAME',
       payload: game
+      // payload: player
     })
 
-    return game
+    return {game, player}
   }
 
   @Authorized()

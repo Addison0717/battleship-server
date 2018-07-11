@@ -9,21 +9,21 @@ type Status = 'pending' | 'started' | 'finished'
 
 const emptyRow: Row = [null, null, null, null, null]
 
-const randomRow: Row[] = [ ['b', null, null, null, null],
-                    [null , 'b', null, null, null],
-                    [null, null, 'b', null, null],
-                    [null, null, null, 'b', null], 
-                    [null, null, null, null, 'b'] ]
+// const randomRow: Row[] = [ ['b', null, null, null, null],
+//                     [null , 'b', null, null, null],
+//                     [null, null, 'b', null, null],
+//                     [null, null, null, 'b', null], 
+//                     [null, null, null, null, 'b'] ]
 
-const startingBoatRow: Row = randomRow[Math.floor(Math.random() * randomRow.length)]
+// const startingBoatRow: Row = randomRow[Math.floor(Math.random() * randomRow.length)]
 
-const randomBoatLocation: Board[] = [[ startingBoatRow, emptyRow, emptyRow, emptyRow, emptyRow ],
-                                  [ emptyRow, startingBoatRow, emptyRow, emptyRow, emptyRow ],
-                                  [ emptyRow, emptyRow, startingBoatRow, emptyRow, emptyRow ],
-                                  [ emptyRow, emptyRow, emptyRow, startingBoatRow, emptyRow ],
-                                  [ emptyRow, emptyRow, emptyRow, emptyRow, startingBoatRow ]]
+// const randomBoatLocation: Board[] = [[ startingBoatRow, emptyRow, emptyRow, emptyRow, emptyRow ],
+//                                   [ emptyRow, startingBoatRow, emptyRow, emptyRow, emptyRow ],
+//                                   [ emptyRow, emptyRow, startingBoatRow, emptyRow, emptyRow ],
+//                                   [ emptyRow, emptyRow, emptyRow, startingBoatRow, emptyRow ],
+//                                   [ emptyRow, emptyRow, emptyRow, emptyRow, startingBoatRow ]]
 
-let defaultBoatLocation: Board = randomBoatLocation[Math.floor(Math.random() * randomBoatLocation.length)]
+// let defaultBoatLocation: Board = randomBoatLocation[Math.floor(Math.random() * randomBoatLocation.length)]
 
 
 
@@ -76,9 +76,11 @@ export class Player extends BaseEntity {
   @Column('char', {length: 1})
   symbol: Symbol
 
-  // @Column('json', {default: defaultBoatLocation})
   @Column('json')
   boatLocation: Board
+
+  @Column('json', {default: emptyBoard})
+  myBoard: Board
 
   @Column()
   currentUser?: number

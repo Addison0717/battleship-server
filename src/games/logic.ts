@@ -52,7 +52,7 @@ export const calculateWinner = (board: Board): Symbol | null =>
 export const calculateHit = (board: Board, boatLocation: Board) => 
    { 
      if(true) {
-      return true
+      return false
     }
   }
 
