@@ -116,23 +116,27 @@ export default class GameController {
     if (!player) throw new ForbiddenError(`You are not part of this game`)
     if (game.status !== 'started') throw new BadRequestError(`The game is not started yet`)
     if (player.symbol !== game.turn) throw new BadRequestError(`It's not your turn`)
+
+
     // if (!isValidTransition(player.symbol, game.board, update.board)) {
     //   throw new BadRequestError(`Invalid move`)
     // }    
 
-    // const winner = calculateWinner(update.board)
-    // const hitBoat = calculateHit(update.board, player.boatLocation)
 
-    // if (winner && hitBoat) {
+
+
+    // const winner = calculateWinner(update.board)
+    
+    const winner = calculateHit(update.board)
+
+    // if (winner) {
     //   game.winner = winner
     //   game.status = 'finished'
     // }
-    // else if (finished(update.board)) {
-    //   game.status = 'finished'
-    // }
-    // else {
-    //   game.turn = player.symbol === 'x' ? 'o' : 'x'
-    // }
+
+
+
+
 
     game.turn = player.symbol === 'x' ? 'o' : 'x'
 

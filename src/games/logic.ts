@@ -49,14 +49,21 @@ export const calculateWinner = (board: Board): Symbol | null =>
 
 
 
-export const calculateHit = (board: Board, boatLocation: Board) => 
+export const calculateHit = (board: Board) => 
    { 
-     if(true) {
+     if(board) {
       return false
     }
   }
 
-  
+  // game.players.filter(x => {return x.currentUser !== this.props.userId})[0].boatLocation.map(
+  //   (row, rowIndex) => row.map((cell, cellIndex) => {
+  //     if (rowIndex === toRow && cellIndex === toCell && cell === "b") return console.log( "you hit the boat!" )
+  //     else return cell
+  //   })
+  // )
+
+  // game.players.filter(x => {return x.currentUser !== this.props.userId})[0].boatLocation
 
 
 
