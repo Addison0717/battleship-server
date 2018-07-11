@@ -80,4 +80,7 @@ export class Player extends BaseEntity {
   @Column('json')
   boatLocation: Board
 
+  @Column()
+  currentUser?: number
+
 }

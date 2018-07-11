@@ -51,7 +51,8 @@ export default class GameController {
       game: entity, 
       user,
       symbol: 'x',
-      boatLocation: defaultBoatLocation1
+      boatLocation: defaultBoatLocation1,
+      currentUser: user.id
     }).save()
 
     const game = await Game.findOneById(entity.id)
@@ -82,7 +83,8 @@ export default class GameController {
       game, 
       user,
       symbol: 'o',
-      boatLocation: defaultBoatLocation2
+      boatLocation: defaultBoatLocation2,
+      currentUser: user.id
     }).save()
 
     io.emit('action', {
