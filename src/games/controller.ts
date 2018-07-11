@@ -145,17 +145,17 @@ export default class GameController {
 
     await player.save()
 
+    game.players.filter(x => {return x.currentUser === player.id})[0].myBoard = player.myBoard
+
     console.log('THIS PLAYER',player)
     console.log('UPDATE',update)
-
-    
+    console.log('GAME',game)
 
     io.emit('action', {
       type: 'UPDATE_GAME',
       payload: game
-      // payload: player
     })
-
+    
     return {game, player}
   }
 
