@@ -47,6 +47,20 @@ export const calculateWinner = (board: Board): Symbol | null =>
     .filter(row => row[0] && row.every(symbol => symbol === row[0]))
     .map(row => row[0])[0] || null
 
+
+
+export const calculateHit = (board: Board, boatLocation: Board) => 
+   { 
+     if(true) {
+      return true
+    }
+  }
+
+  
+
+
+
+
 export const finished = (board: Board): boolean =>
   board
     .reduce((a,b) => a.concat(b) as Row)
