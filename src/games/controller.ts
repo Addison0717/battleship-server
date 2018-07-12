@@ -105,9 +105,19 @@ export default class GameController {
 
     const player = await Player.findOne({ user, game })
 
+    console.log("THIS IS RIGHT BEFORE THE ERROR HANDLERS")
+
     if (!player) throw new ForbiddenError(`You are not part of this game`)
     if (game.status !== 'started') throw new BadRequestError(`The game is not started yet`)
     if (player.symbol !== game.turn) throw new BadRequestError(`It's not your turn`)
+
+    console.log("THIS IS RIGHT AFTER THE ERROR HANDLERS")
+
+    console.log("BEFORE PLAYER" )
+    console.log('THIS IS THE PLAYER', player)
+    console.log('AFTER PLAYER')
+
+    console.log("GAME PLAYERS",game.players)
 
     if (update.winner) {
       game.winner = update.winner
@@ -118,11 +128,19 @@ export default class GameController {
 
     await game.save()
 
-    player.myBoard = update.board
+    // if(player !== undefined) {
+      player.myBoard = update.board
+    // }
 
     await player.save()
 
-    game.players.filter(x => {return x.currentUser === player.id})[0].myBoard = player.myBoard
+
+    // if(player !== undefined) {
+      // game.players.filter(x => {return x.currentUser === player.id})[0].myBoard = player.myBoard
+      game.players.filter(x => {return x.currentUser === player.currentUser})[0].myBoard = player.myBoard
+    // }  
+
+
 
     console.log('THIS PLAYER',player)
     console.log('UPDATE',update)
