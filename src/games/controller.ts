@@ -103,7 +103,8 @@ export default class GameController {
   async updateGame(
     @CurrentUser() user: User,
     @Param('id') gameId: number,
-    @Body() update: GameUpdate
+    // @Body() update: GameUpdate
+    @Body() update
   ) {
 
     console.log("This is the beginning of the patch")
@@ -117,26 +118,18 @@ export default class GameController {
     if (game.status !== 'started') throw new BadRequestError(`The game is not started yet`)
     if (player.symbol !== game.turn) throw new BadRequestError(`It's not your turn`)
 
-
     // if (!isValidTransition(player.symbol, game.board, update.board)) {
     //   throw new BadRequestError(`Invalid move`)
     // }    
 
-
-
-
     // const winner = calculateWinner(update.board)
     
-    const winner = calculateHit(update.board)
+    // const winner = calculateHit(update.board)
 
-    // if (winner) {
-    //   game.winner = winner
-    //   game.status = 'finished'
-    // }
-
-
-
-
+    if (update.winner) {
+      game.winner = update.winner
+      game.status = 'finished'
+    }
 
     game.turn = player.symbol === 'x' ? 'o' : 'x'
 
