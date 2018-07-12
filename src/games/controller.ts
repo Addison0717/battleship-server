@@ -98,7 +98,7 @@ export default class GameController {
     @Body() update
   ) {
 
-    console.log("This is the beginning of the patch")
+    console.log("THIS IS THE BEGINNING OF THE PATCH")
 
     const game = await Game.findOneById(gameId)
     if (!game) throw new NotFoundError(`Game does not exist`)
