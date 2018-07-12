@@ -4,8 +4,8 @@ import {
 } from 'routing-controllers'
 import User from '../users/entity'
 import { Game, Player, Board, Row } from './entities'
-import {IsBoard, isValidTransition, calculateWinner, finished, calculateHit} from './logic'
-import { Validate } from 'class-validator'
+// import {IsBoard, isValidTransition, calculateWinner, finished, calculateHit} from './logic'
+// import { Validate } from 'class-validator'
 import {io} from '../index'
 
 
@@ -27,14 +27,6 @@ const randomBoatLocation: Board[] = [[ startingBoatRow, emptyRow, emptyRow, empt
 
 let defaultBoatLocation1: Board = randomBoatLocation[Math.floor(Math.random() * randomBoatLocation.length)]
 let defaultBoatLocation2: Board = randomBoatLocation[Math.floor(Math.random() * randomBoatLocation.length)]
-
-class GameUpdate {
-
-  @Validate(IsBoard, {
-    message: 'Not a valid board'
-  })
-  board: Board
-}
 
 @JsonController()
 export default class GameController {
@@ -103,7 +95,6 @@ export default class GameController {
   async updateGame(
     @CurrentUser() user: User,
     @Param('id') gameId: number,
-    // @Body() update: GameUpdate
     @Body() update
   ) {
 
@@ -118,14 +109,6 @@ export default class GameController {
     if (game.status !== 'started') throw new BadRequestError(`The game is not started yet`)
     if (player.symbol !== game.turn) throw new BadRequestError(`It's not your turn`)
 
-    // if (!isValidTransition(player.symbol, game.board, update.board)) {
-    //   throw new BadRequestError(`Invalid move`)
-    // }    
-
-    // const winner = calculateWinner(update.board)
-    
-    // const winner = calculateHit(update.board)
-
     if (update.winner) {
       game.winner = update.winner
       game.status = 'finished'
@@ -134,9 +117,6 @@ export default class GameController {
     game.turn = player.symbol === 'x' ? 'o' : 'x'
 
     await game.save()
-
-    // game.board = update.board
-    // game.players.filter(x => {return x.currentUser === userId})[0].myBoard = update.board
 
     player.myBoard = update.board
 
