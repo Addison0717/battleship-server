@@ -98,26 +98,14 @@ export default class GameController {
     @Body() update
   ) {
 
-    console.log("THIS IS THE BEGINNING OF THE PATCH")
-
     const game = await Game.findOneById(gameId)
     if (!game) throw new NotFoundError(`Game does not exist`)
 
     const player = await Player.findOne({ user, game })
 
-    console.log("THIS IS RIGHT BEFORE THE ERROR HANDLERS")
-
     if (!player) throw new ForbiddenError(`You are not part of this game`)
     if (game.status !== 'started') throw new BadRequestError(`The game is not started yet`)
     if (player.symbol !== game.turn) throw new BadRequestError(`It's not your turn`)
-
-    console.log("THIS IS RIGHT AFTER THE ERROR HANDLERS")
-
-    console.log("BEFORE PLAYER" )
-    console.log('THIS IS THE PLAYER', player)
-    console.log('AFTER PLAYER')
-
-    console.log("GAME PLAYERS",game.players)
 
     if (update.winner) {
       game.winner = update.winner
@@ -128,23 +116,15 @@ export default class GameController {
 
     await game.save()
 
-    // if(player !== undefined) {
-      player.myBoard = update.board
-    // }
+    player.myBoard = update.board
 
     await player.save()
 
-
-    // if(player !== undefined) {
-      // game.players.filter(x => {return x.currentUser === player.id})[0].myBoard = player.myBoard
-      game.players.filter(x => {return x.currentUser === player.currentUser})[0].myBoard = player.myBoard
-    // }  
-
-
-
-    console.log('THIS PLAYER',player)
-    console.log('UPDATE',update)
-    console.log('GAME',game)
+    game.players.filter(x => {return x.currentUser === player.currentUser})[0].myBoard = player.myBoard
+ 
+    // console.log('THIS PLAYER',player)
+    // console.log('UPDATE',update)
+    // console.log('GAME',game)
 
     io.emit('action', {
       type: 'UPDATE_GAME',
