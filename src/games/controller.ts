@@ -11,11 +11,11 @@ import {io} from '../index'
 
 const emptyRow: Row = [null, null, null, null, null]
 
-const randomRow: Row[] = [ ['b', null, null, null, null],
-                    [null , 'b', null, null, null],
-                    [null, null, 'b', null, null],
-                    [null, null, null, 'b', null], 
-                    [null, null, null, null, 'b'] ]
+const randomRow: Row[] = [ ['⛵', null, null, null, null],
+                    [null , '⛵', null, null, null],
+                    [null, null, '⛵', null, null],
+                    [null, null, null, '⛵', null], 
+                    [null, null, null, null, '⛵'] ]
 
 const startingBoatRow: Row = randomRow[Math.floor(Math.random() * randomRow.length)]
 
